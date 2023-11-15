@@ -1,3 +1,12 @@
+<?php
+session_start();
+
+if (isset($_SESSION["login"])) {
+  header("Location: Dashboard.php");
+  exit;
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -20,7 +29,7 @@
         <div class="user-input">
 
           <!-- perhatikan bagian ini -->
-          <form>
+          <form action="../config/LoginController.php" method="POST">
             <div class="mb-3">
               <label for="email" class="form-label">Email address</label>
               <input type="email" class="form-control" id="email" name="email" placeholder="your email...">
