@@ -1,34 +1,47 @@
 <?php
+// tambahkan koneksi database
 require "./connect.php";
 
+// apakah tombol register sudah di pencet
 if (isset($_POST["register"])) {
+  // ambil user input username
   $username = $_POST["username"];
+
+  // ambil user input email
   $email = $_POST["email"];
+
+  // ambil user input password
   $password = $_POST["password"];
+
+  // ambil user input passwordValidate
   $passwordValidate = $_POST["passwordValidate"];
 
-  // cek apakah email sudah terdaftar
+  // pencarian email yang sama
   $checkEmail = mysqli_query($db, "SELECT * FROM users WHERE email='$email'");
 
-  // check apakah ada data yang sudah terdaftar
+  // check apakah email sudah terdaftar
   if (mysqli_fetch_assoc($checkEmail)) {
+    // pesan error
     echo "
     <script>
       alert('Email already exists');
       document.location.href='../view/Login.php';
     </script>
     ";
+    // kembalikan false
     return false;
   }
 
-  // cek apakah password dan passwordValidate
+  // cek apakah password dan passwordValidate itu sama
   if ($password !== $passwordValidate) {
+    // pesan error
     echo "
     <script>
       alert('Password is different');
       document.location.href='../view/Register.php';
     </script>
     ";
+    // kembalikan false
     return false;
   }
 

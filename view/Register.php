@@ -1,8 +1,13 @@
 <?php
+// inisiasi session
 session_start();
 
+// cek apakaah terdapat session dengan key login
 if (isset($_SESSION["login"])) {
+  // arahkan ke view dashboard
   header("Location: Dashboard.php");
+
+  // keluar
   exit;
 }
 ?>

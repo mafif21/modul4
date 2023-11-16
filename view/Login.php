@@ -1,8 +1,42 @@
 <?php
+// inisiasi session
 session_start();
 
+// tambahkan koneksi database
+require "../config/connect.php";
+
+// cek apakah terdapat cookie dengan key id dan 'key'
+if (isset($_COOKIE["id"]) && isset($_COOKIE["key"])) {
+  // buat variable key berisi cookie dengan key 'key'
+  $key = $_COOKIE["key"];
+
+  // buat variable id berisi cookie dengan key 'id'
+  $id = $_COOKIE["id"];
+
+  // pencarian akun yang dimana mempunyai id yang sama dengan cookie key 'id'
+  $findAccount = mysqli_query($db, "SELECT * FROM users WHERE id='$id'");
+
+  // dapatkan semua data
+  $account = mysqli_fetch_assoc($findAccount);
+
+  // Jika nilai $key sama dengan hash SHA-256 dari alamat email pengguna
+  if ($key === hash('sha256', $account["email"])) {
+    // Set session bahwa pengguna telah berhasil login
+    $_SESSION["login"] = true;
+
+    // Simpan ID pengguna ke dalam session
+    $_SESSION["id"] = $account["id"];
+
+    // Simpan nama pengguna ke dalam session
+    $_SESSION["username"] = $account["username"];
+  }
+}
+
+// apakah sudah terdapat session yang mempunyai key login
 if (isset($_SESSION["login"])) {
+  // arahkan ke view dashboard
   header("Location: Dashboard.php");
+  // keluar
   exit;
 }
 ?>
