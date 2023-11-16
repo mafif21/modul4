@@ -1,5 +1,22 @@
 <?php
 session_start();
+require("../config/connect.php");
+
+if (!isset($_SESSION["login"])) {
+  header("Location: Login.php");
+}
+
+if (isset($_SESSION["id"])) {
+  $userId = $_SESSION["id"];
+  $query = "SELECT * FROM users WHERE id='$userId'";
+
+  $userLogin = mysqli_query($db, $query);
+  $datas = [];
+
+  while ($data = mysqli_fetch_assoc($userLogin)) {
+    $datas[] = $data;
+  }
+}
 ?>
 
 <!doctype html>
@@ -8,14 +25,14 @@ session_start();
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Bootstrap demo</title>
+  <title>Dashboard</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
 </head>
 
 <body>
   <nav class="navbar navbar-expand-lg bg-body-tertiary py-3">
     <div class="container">
-      <a class="navbar-brand" href="#">[Your Name]</a>
+      <a class="navbar-brand" href="#"><?= $datas[0]["username"] ?></a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -32,10 +49,10 @@ session_start();
 
   <div class="container d-flex min-vh-100 justify-content-center align-items-center">
     <div class="text-center">
-      <h1 class="mb-3">Hello, Afif👋</h1>
+      <h1 class="mb-3">Hello, <?= $datas[0]["username"] ?>👋</h1>
 
       <!-- perhatikan bagian ini -->
-      <form action="" method="post">
+      <form action="../config/LogoutController.php" method="post">
         <button type="submit" class="btn btn-danger" name="logout">Logout Here❕</button>
       </form>
       <!-- perhatikan bagian ini -->
